@@ -13,8 +13,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "mocha --compilers js:babel-register tests/**/*.js",
-    "test-watch": "mocha --compilers js:babel-register --watch tests/**/*.js"
+    "test": "mocha --compilers js:babel-register tests/**/*.js"
   },
   "author": "Aviv Rosental",
   "license": "ISC"
