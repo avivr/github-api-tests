@@ -16,38 +16,32 @@ describe("Verify user\'s repository has any contributor", function() {
   const state = {};
   state.passed = true;
 
-   afterEach(function() {
-     state.passed = state.passed &&
-     (this.currentTest.state === "passed");
-   });
-
-   beforeEach(function() {
-     if (!state.passed) {
-       return this.currentTest.skip();
-     }
-   });
-
-  it('should get username for user-id 7034093', (done) => {
-    getUsersSinceId(7034093)
-      .then(getFirst)
-      .then((user) => state.username = user.login)
-      .then(() => done())
-      .catch(done);
+  afterEach(function() {
+    state.passed = state.passed &&
+    (this.currentTest.state === "passed");
   });
 
-  it('should get first repository name', (done) => {
-    getRepositoriesForUser(state.username)
+  beforeEach(function() {
+    if (!state.passed) {
+      return this.currentTest.skip();
+    }
+  });
+
+  it('should get username for user-id 7034093', function() {
+    return getUsersSinceId(7034093)
+      .then(getFirst)
+      .then((user) => state.username = user.login);
+  });
+
+  it('should get first repository name', function() {
+    return getRepositoriesForUser(state.username)
       .then(repos => state.repos = repos)
       .then(getFirst)
-      .then(repo => state.repo = repo.name)
-      .then(() => done())
-      .catch(done);
+      .then(repo => state.repo = repo.name);
   });
 
-  it('should get repository contributors', (done) => {
-    getContributorsForRepository(state.username, state.repo)
-      .then(contributors => contributors.should.have.length.above(0))
-      .then(() => done())
-      .catch(done);
+  it('should get repository contributors', function() {
+    return getContributorsForRepository(state.username, state.repo)
+      .then(contributors => contributors.should.have.length.above(0));
   });
 });
