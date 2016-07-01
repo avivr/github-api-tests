@@ -11,7 +11,21 @@ const {
 
 describe("Verify user\'s repository has any contributor", function() {
   this.timeout(5000);
+  this.slow(1000);
+
   const state = {};
+  state.passed = true;
+
+   afterEach(function() {
+     state.passed = state.passed &&
+     (this.currentTest.state === "passed");
+   });
+
+   beforeEach(function() {
+     if (!state.passed) {
+       return this.currentTest.skip();
+     }
+   });
 
   it('should get username for user-id 7034093', (done) => {
     getUsersSinceId(7034093)
@@ -22,7 +36,6 @@ describe("Verify user\'s repository has any contributor", function() {
   });
 
   it('should get first repository name', (done) => {
-    expect(state.username).to.be.a('string', "No select user");
     getRepositoriesForUser(state.username)
       .then(repos => state.repos = repos)
       .then(getFirst)
@@ -32,8 +45,6 @@ describe("Verify user\'s repository has any contributor", function() {
   });
 
   it('should get repository contributors', (done) => {
-    expect(state.repo).to.be.a('string', "No selected repository");
-    expect(state.username).to.be.an('string', "No selected user");
     getContributorsForRepository(state.username, state.repo)
       .then(contributors => contributors.should.have.length.above(0))
       .then(() => done())
